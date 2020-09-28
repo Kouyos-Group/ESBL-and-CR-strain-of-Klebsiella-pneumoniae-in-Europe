@@ -1,3 +1,4 @@
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 #Loading libraries
 library(deSolve)
 library(parallel)
@@ -8,6 +9,7 @@ sourceCpp("SCCH.cpp")
 #Main function, recieve initial parameters and give back number of infected individuals each year(at the end of the year)
 sourceCpp("SCCII2.cpp")
 #Loading the csv files with data
+input_names<- c("Croatia","Denmark","Finland","France", "Greece", "Hungary", "Italy", "Netherlands", "Norway","Portugal", "Sweden")
 for (c in 1:length(input_names)){
   name_curr <- paste(input_names[c], "3rd_4th_gen.csv", sep="_")
   name <- paste(input_names[c], "data_res_cons", sep="_")
@@ -205,6 +207,11 @@ one_country_likelihood <- function(input_one){
   return(summ)
 }
 #The function gives a log likelihood from the given parameters
+curr_list <- list(name = "Country name",
+                  vec = c(0,0,0,0,0,
+                          0,0,
+                          0,0,0))
+input_fc <- rep(list(curr_list),11)
 all_countries_run <- function(input_all){
   for(i in 1:11){
     vec <- c(input_all[1],input_all[2],input_all[3],input_all[4],input_all[5],
@@ -212,9 +219,9 @@ all_countries_run <- function(input_all){
              input_all[7],input_all[17+i],input_all[28+i])
     curr_list <-  list(name = input_names[i],
                        vec = vec)
-    input_fc_11[[i]] <- curr_list
+    input_fc[[i]] <- curr_list
   }
-  ALL <- mclapply(X = input_fc_11,FUN = one_country, mc.cores = 11)
+  ALL <- mclapply(X = input_fc,FUN = one_country_likelihood, mc.cores = 11)
   summ <- 0
   for (i in order){
     summ <- summ + as.numeric(ALL[[i]])
@@ -240,9 +247,10 @@ out_vvv <- rep(3,12)
 order <- c(1:11)
 input_func <- rep(0,40)
 for (t in 1:5){
-  output_func <- optim(input_func, all_countries_run, method = "BFGS", control = list(maxit=70,trace=10, REPORT =2))
+  output_func <- optim(input_func, all_countries_run, method = "BFGS", control = list(maxit=5,trace=2, REPORT =2))
   input_func <- output_func$par
 }
+all_countries_run(input_func)
 output_without_one[12,] <- input_func
 out_lll[12] <- output_func$value
 out_vvv[12] <- output_func$convergence
