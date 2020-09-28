@@ -204,12 +204,7 @@ one_country_likelihood <- function(input_one){
   }
   return(summ)
 }
-for (c in 1:length(input_names)){
-  name_curr <- paste(input_names[c], "3rd_4th_gen.csv", sep="_")
-  name <- paste(input_names[c], "data_res_cons", sep="_")
-  data_all1      <<- read.csv(name_curr, header =  TRUE)
-  assign(name, data_all1)
-}
+#The function gives a log likelihood from the given parameters
 all_countries_run <- function(input_all){
   for(i in 1:11){
     vec <- c(input_all[1],input_all[2],input_all[3],input_all[4],input_all[5],
@@ -227,40 +222,38 @@ all_countries_run <- function(input_all){
   return(summ)
 }
 
+#Then we give an example of fitting the parameters for all 11 countries together and for the "one-out" counterfactual scenario
+#Output values
 out_lll <- rep(0,12)
 out_vvv <- rep(3,12)
-output_without_one_1 <- read.csv("Results_original_one_out_uniform_7days.csv")
-output_without_one1 <- matrix(0, nrow = 12, ncol = 40)
-for (i in 1:12){
-  for (j in 1:40){
-    output_without_one1[i,j] <-  as.numeric(output_without_one_1[i,j+1])
-  }
+output_without_one <- matrix(0, 11,40)
+#Countries which are taken into account in the current simulation
+basic <- matrix(0,11,10)
+basic[1,] <-c(2:11) 
+for (i in 2:10){
+  basic[i,] <- c(1:(i-1),(i+1):11)
 }
+basic[11,] <-c(1:10)
+as.numeric(a[12,2:41])
+out_lll <- rep(0,12)
+out_vvv <- rep(3,12)
 order <- c(1:11)
-input_func <- output_without_one1[12,]
+input_func <- rep(0,40)
 for (t in 1:5){
   output_func <- optim(input_func, all_countries_run, method = "BFGS", control = list(maxit=70,trace=10, REPORT =2))
   input_func <- output_func$par
-  #output_func <- optim(input_func, all_countries_run, method = "Nelder-Mead", control = list(maxit=2000,trace=10))
-  #input_func <- output_func$par 
 }
-output_without_one1[12,] <- input_func
+output_without_one[12,] <- input_func
 out_lll[12] <- output_func$value
 out_vvv[12] <- output_func$convergence
 for (i in c(1:11)){
-  #shift <- round(36.5*i)
   order <- basic[i,]
-  #input_func <-  c(-2.5731162414638,-18.2956207677137,-0.663473915500459,-47.7970790391697,-218.896453171738,3.35928892212299,-0.864605205250779,-0.995833462654376,-16.4198635887301,-1.20986014835024,0.352908071310449,-1.09315526844245,-0.317033858328381,-2.04464637252174,-1.64301366516222,-0.464595222101174,-1.36651419250853,-0.277390660796757,-3.37282988577468,-24.0663285292907,-3.96805948515294,0.301953385591913,-0.802434856280226,-1.72385923560118,-6.24324998440283,-10.9336092656597,-1.48737479242611,-25.4305397867978,-25.2006093121999,-17.6491274380447,-3.08135603786735,-14.8806940491201,-0.240812257012782,-10.2752393795858,-2.45438680377348,-8.36050233628421,-2.74724407394842,-551.047227958594,-4.12248684526434,564.533128318332)
-  #input_func <- Basic_fc
-  input_func <- output_without_one1[i,]
+  input_func <- output_without_one[12,]
   for (t in 1:2){
     output_func <- optim(input_func, all_countries_run, method = "BFGS", control = list(maxit=70,trace=10, REPORT =2))
     input_func <- output_func$par
-    #output_func <- optim(input_func, all_countries_run, method = "Nelder-Mead", control = list(maxit=2000,trace=10))
-    #input_func <- output_func$par 
   }
-  output_without_one1[i,] <- input_func
+  output_without_one[i,] <- input_func
   out_lll[i] <- output_func$value
   out_vvv[i] <- output_func$convergence
 }
-write.csv(output_without_one1, "Results_original_one_out_uniform_7days.csv")
