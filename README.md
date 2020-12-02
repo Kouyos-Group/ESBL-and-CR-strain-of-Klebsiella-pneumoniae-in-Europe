@@ -21,7 +21,10 @@ Presented values should be converted from the (-Inf, Inf) to the (lower_boundary
 
 {Country_name}_3rd_4th_gen_detailed.csv are the files with the data presented with more details. The distribution of consumption by the generation of cephalosporins and the parameters which were used to fill the missing data are given.
 
+Hospital beds and length of stay.xlsx consist the data about mean length of stay in hospital and number of beds per 100000, according to WHO.
+
 Presented data on antibiotic consumption and prevalence of the resistance from The European Surveillance System – TESSy, provided by (Croatia, Denmark, Finland, France, Greece, Hungary, Italy, Netherlands, Norway, Portugal, Sweden) and released by ECDC. As required by the ECDC, we confirm that “the views and opinions of the authors expressed herein do not necessarily state or reflect those of the ECDC. The accuracy of the authors' statistical analysis and the findings they report are not the responsibility of ECDC. ECDC is not responsible for conclusions or opinions drawn from the data provided. ECDC is not responsible for the correctness of the data and for data management, data merging and data collation after provision of the data. ECDC shall not be held liable for improper or incorrect use of the data”
+
 ## Multivariate sensitivity analysis
 Printing_multivar_sens_unique.R and Printing_multivar_sens_uniform.R could be used to print the results of multivariate sensitivity analysis.
 
