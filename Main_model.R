@@ -19,6 +19,7 @@ for (c in 1:length(input_names)){
 #The function gives a log likelihood from the given parameters
 one_country_likelihood <- function(input_one){
   #Extracting the parameters
+  #Important note: Given amplitudes are not the same as given in "Range of parameters" in Table S1. This was done due to the adjustment 
   #ESBL fitness cost
   fce1  <- (0.5+atan(input_one$vec[1])/pi)*(0.15)
   #CR fitness cost
@@ -31,9 +32,9 @@ one_country_likelihood <- function(input_one){
   ttc1  <-  0.7
   #Additional suseptability to colonization during antibiotic treatment
   mu1   <- (0.5+atan(input_one$vec[5])/pi)*100
-  #Size of the import reservoir ESBL
+  #Size of the import reservoir ESBL (In the SCCII2 function it will be devided by 100)
   ime1  <- (0.5+atan(input_one$vec[3])/pi)*10000
-  #Size of the import reservoir CR
+  #Size of the import reservoir CR (In the SCCII2 function it will be devided by 100)
   imc1  <- (0.5+atan(input_one$vec[4])/pi)*10000
   #Proportion of people who lose the resistance due to the replacement strain by the wild rype strain
   alpha <- (0.5+atan(input_one$vec[6])/pi) * 0.5
@@ -117,8 +118,8 @@ one_country_likelihood <- function(input_one){
                mu = mu1,
                hospitalization_rate = hospital_size1/(hospital_stay1*(100000-hospital_size1)),
                discharge_rate = 1/hospital_stay1,
-               time_disease_development_community = (mult*4000*365),
-               time_disease_development_hospital = (4000*365),
+               time_disease_development_community = (mult*100*365),
+               time_disease_development_hospital = (100*365),
                time_recovery = 10,
                fitness_cost_S     = 0.0,
                fitness_cost_ESBL  = fce1,
@@ -228,7 +229,6 @@ all_countries_run <- function(input_all){
   }
   return(summ)
 }
-
 #Then we give an example of fitting the parameters for all 11 countries together and for the "one-out" counterfactual scenario
 #Output values
 out_lll <- rep(0,12)
@@ -250,6 +250,7 @@ for (t in 1:5){
   output_func <- optim(input_func, all_countries_run, method = "BFGS", control = list(maxit=5,trace=2, REPORT =2))
   input_func <- output_func$par
 }
+all_countries_run(as.numeric(unique_results[12,]))
 all_countries_run(input_func)
 output_without_one[12,] <- input_func
 out_lll[12] <- output_func$value
