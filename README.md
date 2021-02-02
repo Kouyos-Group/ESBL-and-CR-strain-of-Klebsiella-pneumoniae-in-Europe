@@ -2,7 +2,7 @@
 Code for Kachalov VN, Nguyen H, Balakrishna S, Salazar-Vizcaya L, Sommerstein R, Kuster SP, et al. (2021) Identifying the drivers of multidrug-resistant Klebsiella pneumoniae at a European level. PLoS Comput Biol 17(1): e1008446. https://doi.org/10.1371/journal.pcbi.1008446.
 
 If you want to use the model, see the paper and supporting information for the full model description.
-#Files description
+# Files description
 ## Main code
 Main_model.R consists of the main code.
 
@@ -28,8 +28,8 @@ Presented data on antibiotic consumption and prevalence of the resistance from T
 ## Multivariate sensitivity analysis
 Printing_multivar_sens_unique.R and Printing_multivar_sens_uniform.R could be used to print the results of multivariate sensitivity analysis.
 
-##Citation
+## Citation
 Kachalov VN, Nguyen H, Balakrishna S, Salazar-Vizcaya L, Sommerstein R, Kuster SP, et al. (2021) Identifying the drivers of multidrug-resistant Klebsiella pneumoniae at a European level. PLoS Comput Biol 17(1): e1008446. https://doi.org/10.1371/journal.pcbi.1008446.
 
-##Contact
+## Contact
 Viacheslav Kachalov: viacheslav.kachalov@usz.ch or kachalov93@gmail.com
